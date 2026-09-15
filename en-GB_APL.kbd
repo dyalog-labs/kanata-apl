@@ -1,25 +1,41 @@
 ;; English (UK) keyboard mappings for APL
-;; en-GB_APL-v1.1
+;; en-GB_APL-v2.0
+;; Compositions live in altgruk-compose.kbd and apl-numpad-box.kbd,
+;; both included at the bottom.
+
+;; ---------------------------------------------------------------------------
+;; Shifting keys
+;; ---------------------------------------------------------------------------
 
 ;; Choose one APL shifting key. Its default behaviour is produced by double-tapping.
 (defvar apl caps)
 
+;; Choose the composition ("dead key") shifting key.
+(defvar dia ralt)
+
 ;; Choose more APL shifting keys by mapping them to @apl-mode in the base layer
 (deflayermap base
-  $apl  @apl-mode
-  rctrl @apl-mode
-  lshift @shift
+  $apl   @apl-mode
+  rctrl  @apl-mode
+  $dia   @dia-mode
+  lsft   @shift
+  rsft   @rshift
 )
 
 ;; With this layer, the order of APL+Shift or Shift+APL does not matter.
 (deflayermap shift
-  $apl @apl-shift
-  ___ (multi lshift _) ;; Defaults for unmapped keys
+  $apl  @apl-shift
+  rctrl @apl-shift
 )
 
+;; ---------------------------------------------------------------------------
+;; APL glyphs
+;; ---------------------------------------------------------------------------
+
 (deflayermap APL
-  lshift @apl-shift
-  rshift @apl-shift
+  lsft @apl-shift
+  rsft @apl-shift
+  (t! numpad-box)      ;; box drawing on the keypad, from apl-numpad-box.kbd
   Backquote     (unicode ⋄)
   1             (unicode ¨)
   2             (unicode ¯)
@@ -70,7 +86,7 @@
 )
 
 (deflayermap APL-shift
-  grave         (unicode ⌺)
+  Backquote     (unicode ⌺)
   1             (unicode ⌶)
   2             (unicode ⍫)
   3             (unicode ⍒)
@@ -107,6 +123,10 @@
   /             (unicode ⍠)
 )
 
+;; ---------------------------------------------------------------------------
+;; Aliases
+;; ---------------------------------------------------------------------------
+
 (defalias apl-mode   ;; Double-tap prefix key to output its symbol
   (tap-dance 200 (
     (layer-while-held APL)
@@ -114,8 +134,12 @@
   ))
 )
 
-(defalias shift (layer-while-held shift))
+(defalias shift     (multi lsft (layer-while-held shift)))
+(defalias rshift    (multi rsft (layer-while-held shift)))
 (defalias apl-shift (layer-while-held APL-shift))
+
+(include altgruk-compose.kbd)
+(include apl-numpad-box.kbd)
 
 (defsrc)
 (defcfg
