@@ -1,0 +1,361 @@
+;; abrudz-style dead-key compositions for kanata -- drop-in module
+;; altgruk-compose-v1.0
+;;
+;; Include this from your main config, at the bottom:
+;;
+;;     (include altgruk-compose.kbd)
+;;
+;; The path is resolved relative to the directory of the main config file.
+;;
+;; This module expects three things from the host config:
+;;   1. a base layer named `base`
+;;   2. (defvar apl <key>) and (defvar dia <key>), defined above the include
+;;   3. the APL shifting keys being `caps` and `rctrl` -- if you change those,
+;;      change $apl-held and $apl-sft below to match
+;;
+;; ...and one line in the host's base layer to reach it:
+;;
+;;     $dia @dia-mode
+;;
+;; Names claimed in the global namespace:
+;;   layers    dia dk-circumflex dk-diaeresis dk-tilde dk-lowline
+;;             dk-acute dk-grave dk-space
+;;   alias     @dia-mode
+;;   variables $apl-held $sft-held $apl-sft $rst
+
+;; Logic checks reused throughout the composition layers.
+;; NOTE: if you change $apl in the host config, change these to match.
+(defvar
+  apl-held ((input real caps) (input real rctrl))
+  sft-held (lsft rsft)
+  apl-sft  ((and (or (input real caps) (input real rctrl)) (or lsft rsft)))
+  rst      (layer-switch base)
+)
+
+(defalias dia-mode  (layer-while-held dia))
+
+;; ---------------------------------------------------------------------------
+;; Compositions: $dia arms a dead key, the next keystroke completes it
+;; ---------------------------------------------------------------------------
+;; Shift is optional when arming, so AltGr+W and AltGr+Shift+W both arm ^.
+;; While armed: plain key = ASCII/letter entry, Shift = shifted entry,
+;; holding an APL key = the APL-glyph entry, Space = the bare accent,
+;; Esc = cancel, any unmapped key types normally and cancels.
+
+(deflayermap dia
+  w   (layer-switch dk-circumflex)
+  r   (layer-switch dk-diaeresis)
+  y   (layer-switch dk-tilde)
+  u   (layer-switch dk-lowline)
+  a   (layer-switch dk-acute)
+  s   (layer-switch dk-grave)
+  spc (layer-switch dk-space)
+)
+
+;; ^ (AltGr+W) -- superscripts, circumflex, quad family
+(deflayermap dk-circumflex
+  1 (multi (unicode ¹) $rst)
+  2 (multi (unicode ²) $rst)
+  3 (multi (unicode ³) $rst)
+  4 (multi (unicode ⁴) $rst)
+  5 (multi (unicode ⁵) $rst)
+  6 (multi (unicode ⁶) $rst)
+  7 (multi (unicode ⁷) $rst)
+  8 (multi (switch $apl-held (unicode ⍯) break () (unicode ⁸) break) $rst)
+  9 (multi (switch $apl-held (unicode ⍌) break $sft-held (unicode ⁽) break () (unicode ⁹) break) $rst)
+  0 (multi (switch $apl-held (unicode ⍓) break $sft-held (unicode ⁾) break () (unicode ⁰) break) $rst)
+  - (multi (fork (unicode ⁻) (unicode ⌂) $sft-held) $rst)
+  = (multi (switch $apl-held (unicode ⌹) break $sft-held (unicode ⁺) break () (unicode ⌸) break) $rst)
+  Backquote (multi (switch $apl-held (unicode ⌺) break) $rst)
+  [ (multi (switch $apl-held (unicode ⍇) break) $rst)
+  ] (multi (switch $apl-held (unicode ⍈) break) $rst)
+  a (multi (fork (unicode â) (unicode Â) $sft-held) $rst)
+  c (multi (fork (unicode ĉ) (unicode Ĉ) $sft-held) $rst)
+  e (multi (fork (unicode ê) (unicode Ê) $sft-held) $rst)
+  g (multi (switch $apl-held (unicode ⍔) break $sft-held (unicode Ĝ) break () (unicode ĝ) break) $rst)
+  h (multi (switch $apl-held (unicode ⍍) break $sft-held (unicode Ĥ) break () (unicode ĥ) break) $rst)
+  i (multi (fork (unicode î) (unicode Î) $sft-held) $rst)
+  j (multi (switch $apl-held (unicode ⌻) break $sft-held (unicode Ĵ) break () (unicode ĵ) break) $rst)
+  o (multi (switch $apl-held (unicode ⌼) break $sft-held (unicode Ô) break () (unicode ô) break) $rst)
+  p (multi (unicode π) $rst)
+  s (multi (fork (unicode ŝ) (unicode Ŝ) $sft-held) $rst)
+  t (multi tab $rst)
+  u (multi (switch $apl-held (unicode ⍗) break $sft-held (unicode Û) break () (unicode û) break) $rst)
+  w (multi (fork (unicode ŵ) (unicode Ŵ) $sft-held) $rst)
+  x (multi del $rst)
+  y (multi (switch $apl-held (unicode ⍐) break $sft-held (unicode Ŷ) break () (unicode ŷ) break) $rst)
+  ; (multi (fork _ (unicode ⍠) $sft-held) $rst)
+  ' (multi (unicode ⍞) $rst)
+  , (multi (fork _ (unicode ⍃) $sft-held) $rst)
+  . (multi (fork (unicode ⌾) (unicode ⍄) $sft-held) $rst)
+  / (multi (fork (unicode ⍁) (unicode ⍰) $sft-held) $rst)
+  IntlBackslash (multi (unicode ⍂) $rst)
+  spc (multi (unicode U+005E) $rst)
+  $apl XX
+  rctrl XX
+  $dia @dia-mode
+  esc $rst
+  lsft _
+  rsft _
+  lctl _
+  lalt _
+  lmet _
+  rmet _
+  ___ (multi _ $rst)
+)
+
+;; ¨ (AltGr+R) -- umlauts, diaeresis operators
+(deflayermap dk-diaeresis
+  0 (multi (unicode °) $rst)
+  1 (multi (fork _ (unicode ‼) $sft-held) $rst)
+  3 (multi (unicode ᑈ) $rst)
+  7 (multi (unicode ᐵ) $rst)
+  8 (multi (unicode ∞) $rst)
+  - (multi (fork _ (unicode …) $sft-held) $rst)
+  a (multi (fork (unicode ä) (unicode Ä) $sft-held) $rst)
+  c (multi (unicode ©) $rst)
+  e (multi (fork (unicode ë) (unicode Ë) $sft-held) $rst)
+  g (multi (switch $apl-held (unicode ⍢) break) $rst)
+  i (multi (fork (unicode ï) (unicode Ï) $sft-held) $rst)
+  j (multi (switch $apl-held (unicode ⍤) break) $rst)
+  m (multi (unicode µ) $rst)
+  n (multi (switch $apl-held (unicode ⍡) break) $rst)
+  o (multi (switch $apl-held (unicode ⍥) break $sft-held (unicode Ö) break () (unicode ö) break) $rst)
+  p (multi (fork (unicode ¶) (unicode §) $sft-held) $rst)
+  r (multi (unicode ®) $rst)
+  s (multi (fork (unicode ß) (unicode ẞ) $sft-held) $rst)
+  t (multi (switch $apl-held (unicode ⍨) break) $rst)
+  u (multi (fork (unicode ü) (unicode Ü) $sft-held) $rst)
+  y (multi (fork (unicode ÿ) (unicode Ÿ) $sft-held) $rst)
+  . (multi (fork (unicode ∵) (unicode ⍩) $sft-held) $rst)
+  Backslash (multi (fork _ (unicode ⍨) $sft-held) $rst)
+  IntlBackslash (multi (fork _ (unicode ¦) $sft-held) $rst)
+  spc (multi (unicode ¨) $rst)
+  $apl XX
+  rctrl XX
+  $dia @dia-mode
+  esc $rst
+  lsft _
+  rsft _
+  lctl _
+  lalt _
+  lmet _
+  rmet _
+  ___ (multi _ $rst)
+)
+
+;; ~ (AltGr+Y) -- tildes, fractions, currency, tilde-family APL
+(deflayermap dk-tilde
+  1 (multi (switch $apl-held (unicode ⍨) break () (unicode ¼) break) $rst)
+  2 (multi (unicode ½) $rst)
+  3 (multi (unicode ¾) $rst)
+  8 (multi (switch $apl-held (unicode ≉) break) $rst)
+  9 (multi (switch $apl-held (unicode ⍱) break) $rst)
+  0 (multi (switch $apl-held (unicode ⍲) break () (unicode ⍬) break) $rst)
+  = (multi (unicode ≈) $rst)
+  [ (multi (switch $apl-held (unicode ⍅) break) $rst)
+  ] (multi (switch $apl-held (unicode ⍆) break) $rst)
+  a (multi (fork (unicode ã) (unicode Ã) $sft-held) $rst)
+  c (multi (switch $apl-held (unicode ⋔) break () (unicode ¢) break) $rst)
+  d (multi (fork (unicode ð) (unicode Ð) $sft-held) $rst)
+  e (multi (switch $apl-held (unicode ∉) break $sft-held (unicode €) break) $rst)
+  g (multi (switch $apl-held (unicode ⍫) break) $rst)
+  i (multi (fork (unicode ĩ) (unicode Ĩ) $sft-held) $rst)
+  l (multi (fork _ (unicode £) $sft-held) $rst)
+  n (multi (fork (unicode ñ) (unicode Ñ) $sft-held) $rst)
+  o (multi (fork (unicode õ) (unicode Õ) $sft-held) $rst)
+  u (multi (switch $apl-held (unicode ⍖) break $sft-held (unicode Ũ) break () (unicode ũ) break) $rst)
+  v (multi (switch $apl-held (unicode ⍦) break) $rst)
+  y (multi (switch $apl-held (unicode ⍏) break $sft-held (unicode ¥) break) $rst)
+  z (multi (switch $apl-held (unicode ⍧) break) $rst)
+  Backslash (multi (fork _ (unicode ≈) $sft-held) $rst)
+  IntlBackslash (multi (fork _ (unicode ⍭) $sft-held) $rst)
+  spc (multi (unicode U+007E) $rst)
+  $apl XX
+  rctrl XX
+  $dia @dia-mode
+  esc $rst
+  lsft _
+  rsft _
+  lctl _
+  lalt _
+  lmet _
+  rmet _
+  ___ (multi _ $rst)
+)
+
+;; _ (AltGr+U) -- subscripts, underbar APL, circled letters
+(deflayermap dk-lowline
+  1 (multi (unicode ₁) $rst)
+  2 (multi (unicode ₂) $rst)
+  3 (multi (unicode ₃) $rst)
+  4 (multi (unicode ₄) $rst)
+  5 (multi (fork (unicode ₅) (unicode ‰) $sft-held) $rst)
+  6 (multi (unicode ₆) $rst)
+  7 (multi (unicode ₇) $rst)
+  8 (multi (switch $apl-held (unicode ≢) break () (unicode ₈) break) $rst)
+  9 (multi (fork (unicode ₉) (unicode ₍) $sft-held) $rst)
+  0 (multi (fork (unicode ₀) (unicode ₎) $sft-held) $rst)
+  - (multi (fork (unicode ₋) (unicode —) $sft-held) $rst)
+  = (multi (fork (unicode ≡) (unicode ₊) $sft-held) $rst)
+  Backquote (multi (switch $apl-held (unicode ⍚) break) $rst)
+  a (multi (switch $apl-held (unicode ⍶) break $sft-held (unicode Ⓐ) break () (unicode ⓐ) break) $rst)
+  b (multi (switch $apl-held (unicode ⍊) break $sft-held (unicode Ⓑ) break () (unicode ⓑ) break) $rst)
+  c (multi (fork (unicode ⓒ) (unicode Ⓒ) $sft-held) $rst)
+  d (multi (switch $apl-held (unicode ⊙) break $sft-held (unicode Ⓓ) break () (unicode ⓓ) break) $rst)
+  e (multi (switch $apl-held (unicode ⍷) break $sft-held (unicode Ⓔ) break () (unicode ⓔ) break) $rst)
+  f (multi (fork (unicode ⓕ) (unicode Ⓕ) $sft-held) $rst)
+  g (multi (fork (unicode ⓖ) (unicode Ⓖ) $sft-held) $rst)
+  h (multi (switch $apl-held (unicode ⍙) break $sft-held (unicode Ⓗ) break () (unicode ⓗ) break) $rst)
+  i (multi (switch $apl-held (unicode ⍸) break $sft-held (unicode Ⓘ) break () (unicode ⓘ) break) $rst)
+  j (multi (switch $apl-held (unicode ⍛) break $sft-held (unicode Ⓙ) break () (unicode ⓙ) break) $rst)
+  k (multi (fork (unicode ⓚ) (unicode Ⓚ) $sft-held) $rst)
+  l (multi (fork (unicode ⓛ) (unicode Ⓛ) $sft-held) $rst)
+  m (multi (fork (unicode ⓜ) (unicode Ⓜ) $sft-held) $rst)
+  n (multi (switch $apl-held (unicode ⍑) break $sft-held (unicode Ⓝ) break () (unicode ⓝ) break) $rst)
+  o (multi (switch $apl-held (unicode ⍜) break $sft-held (unicode Ⓞ) break () (unicode ⓞ) break) $rst)
+  p (multi (fork (unicode ⓟ) (unicode Ⓟ) $sft-held) $rst)
+  q (multi (fork (unicode ⓠ) (unicode Ⓠ) $sft-held) $rst)
+  r (multi (fork (unicode ⓡ) (unicode Ⓡ) $sft-held) $rst)
+  s (multi (fork (unicode ⓢ) (unicode Ⓢ) $sft-held) $rst)
+  t (multi (fork (unicode ⓣ) (unicode Ⓣ) $sft-held) $rst)
+  u (multi (fork (unicode ⓤ) (unicode Ⓤ) $sft-held) $rst)
+  v (multi (fork (unicode ⓥ) (unicode Ⓥ) $sft-held) $rst)
+  w (multi (switch $apl-held (unicode ⍹) break $sft-held (unicode Ⓦ) break () (unicode ⓦ) break) $rst)
+  x (multi (switch $apl-held (unicode ⊇) break $sft-held (unicode Ⓧ) break () (unicode ⓧ) break) $rst)
+  y (multi (fork (unicode ⓨ) (unicode Ⓨ) $sft-held) $rst)
+  z (multi (switch $apl-held (unicode ⊆) break $sft-held (unicode Ⓩ) break () (unicode ⓩ) break) $rst)
+  ; (multi (unicode ⍮) $rst)
+  ' (multi (unicode ⍘) $rst)
+  , (multi (fork (unicode ⍪) (unicode ≤) $sft-held) $rst)
+  . (multi (fork (unicode –) (unicode ≥) $sft-held) $rst)
+  / (multi (fork (unicode ⌿) (unicode ‽) $sft-held) $rst)
+  IntlBackslash (multi (unicode ⍀) $rst)
+  spc (multi (unicode U+005F) $rst)
+  $apl XX
+  rctrl XX
+  $dia @dia-mode
+  esc $rst
+  lsft _
+  rsft _
+  lctl _
+  lalt _
+  lmet _
+  rmet _
+  ___ (multi _ $rst)
+)
+
+;; ´ (AltGr+A) -- acute accents
+;; The Nordic accents need the APL key AND Shift, matching where their base
+;; glyph lives: e.g. APL+Shift+C is æ, so APL+Shift+C here gives ǽ.
+(deflayermap dk-acute
+  1 (multi (switch $apl-held (unicode ᑈ) break) $rst)
+  2 (multi (fork _ (unicode “) $sft-held) $rst)
+  = (multi (fork _ (unicode ∓) $sft-held) $rst)
+  ] (multi (switch $apl-held (unicode ↔) break) $rst)
+  a (multi (fork (unicode á) (unicode Á) $sft-held) $rst)
+  b (multi (switch $apl-sft (unicode ǻ) break) $rst)
+  c (multi (switch $apl-sft (unicode ǽ) break $sft-held (unicode Ç) break () (unicode ç) break) $rst)
+  e (multi (fork (unicode é) (unicode É) $sft-held) $rst)
+  f (multi (switch $apl-sft (unicode Ǽ) break) $rst)
+  g (multi (switch $apl-sft (unicode Ǿ) break $sft-held (unicode Ǵ) break () (unicode ǵ) break) $rst)
+  h (multi (switch $apl-sft (unicode Ǻ) break) $rst)
+  i (multi (fork (unicode í) (unicode Í) $sft-held) $rst)
+  l (multi (fork (unicode ĺ) (unicode Ĺ) $sft-held) $rst)
+  n (multi (fork (unicode ń) (unicode Ń) $sft-held) $rst)
+  o (multi (switch $apl-held (unicode ∅) break $sft-held (unicode Ó) break () (unicode ó) break) $rst)
+  p (multi (fork (unicode þ) (unicode Þ) $sft-held) $rst)
+  r (multi (fork (unicode ŕ) (unicode Ŕ) $sft-held) $rst)
+  s (multi (fork (unicode ś) (unicode Ś) $sft-held) $rst)
+  u (multi (switch $apl-held (unicode ↕) break $sft-held (unicode Ú) break () (unicode ú) break) $rst)
+  v (multi (switch $apl-sft (unicode ǿ) break) $rst)
+  y (multi (fork (unicode ý) (unicode Ý) $sft-held) $rst)
+  z (multi (fork (unicode ź) (unicode Ź) $sft-held) $rst)
+  ' (multi (unicode ‘) $rst)
+  , (multi (fork _ (unicode «) $sft-held) $rst)
+  spc (multi (unicode U+00B4) $rst)
+  $apl XX
+  rctrl XX
+  $dia @dia-mode
+  esc $rst
+  lsft _
+  rsft _
+  lctl _
+  lalt _
+  lmet _
+  rmet _
+  ___ (multi _ $rst)
+)
+
+;; ` (AltGr+S) -- grave accents, box drawing on the number row
+(deflayermap dk-grave
+  1 (multi (switch $apl-held (unicode ᐵ) break $sft-held (unicode ¡) break () (unicode └) break) $rst)
+  2 (multi (fork (unicode ┴) (unicode ”) $sft-held) $rst)
+  3 (multi (unicode ┘) $rst)
+  4 (multi (unicode ├) $rst)
+  5 (multi (unicode ┼) $rst)
+  6 (multi (unicode ┤) $rst)
+  7 (multi (unicode ┌) $rst)
+  8 (multi (unicode ┬) $rst)
+  9 (multi (switch $apl-held (unicode √) break () (unicode ┐) break) $rst)
+  0 (multi (unicode ─) $rst)
+  - (multi (unicode ¬) $rst)
+  = (multi (fork _ (unicode ±) $sft-held) $rst)
+  a (multi (fork (unicode à) (unicode À) $sft-held) $rst)
+  d (multi (switch $apl-held (unicode ⌋) break) $rst)
+  e (multi (fork (unicode è) (unicode È) $sft-held) $rst)
+  i (multi (fork (unicode ì) (unicode Ì) $sft-held) $rst)
+  n (multi (fork (unicode ǹ) (unicode Ǹ) $sft-held) $rst)
+  o (multi (fork (unicode ò) (unicode Ò) $sft-held) $rst)
+  s (multi (switch $apl-held (unicode ⌉) break) $rst)
+  u (multi (fork (unicode ù) (unicode Ù) $sft-held) $rst)
+  ' (multi (unicode ’) $rst)
+  . (multi (fork (unicode │) (unicode ») $sft-held) $rst)
+  / (multi (fork _ (unicode ¿) $sft-held) $rst)
+  Backslash (multi (fork _ (unicode ¬) $sft-held) $rst)
+  spc (multi (unicode U+0060) $rst)
+  $apl XX
+  rctrl XX
+  $dia @dia-mode
+  esc $rst
+  lsft _
+  rsft _
+  lctl _
+  lalt _
+  lmet _
+  rmet _
+  ___ (multi _ $rst)
+)
+
+;; Space (AltGr+Space) -- typographic spaces and dashes
+(deflayermap dk-space
+  1 (multi (fork (unicode U+2007) (unicode U+2012) $sft-held) $rst)
+  3 (multi (unicode U+2004) $rst)
+  4 (multi (unicode U+2005) $rst)
+  5 (multi (fork (unicode U+2009) (unicode U+202F) $sft-held) $rst)
+  6 (multi (unicode U+2006) $rst)
+  8 (multi (unicode U+200A) $rst)
+  0 (multi (unicode U+200B) $rst)
+  - (multi (fork _ (unicode U+2212) $sft-held) $rst)
+  h (multi (fork _ (unicode U+2015) $sft-held) $rst)
+  j (multi (unicode U+200D) $rst)
+  m (multi (fork (unicode U+2003) (unicode —) $sft-held) $rst)
+  n (multi (fork (unicode U+2002) (unicode –) $sft-held) $rst)
+  s (multi (unicode U+200C) $rst)
+  w (multi (unicode U+2060) $rst)
+  . (multi (unicode U+2008) $rst)
+  ' (multi (fork _ (unicode U+2E3A) $sft-held) $rst)
+  Backslash (multi (unicode U+2E3B) $rst)
+  spc (multi (unicode U+00A0) $rst)
+  $apl XX
+  rctrl XX
+  $dia @dia-mode
+  esc $rst
+  lsft _
+  rsft _
+  lctl _
+  lalt _
+  lmet _
+  rmet _
+  ___ (multi _ $rst)
+)

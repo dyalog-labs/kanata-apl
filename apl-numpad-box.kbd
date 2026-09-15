@@ -1,0 +1,55 @@
+;; Dyalog-style box drawing on the numeric keypad -- drop-in module
+;; apl-numpad-box-v1.0
+;;
+;; Mirrors the xkb apl(dyalog_box) variant: while an APL shifting key is held,
+;; the keypad becomes a box-drawing pad, laid out spatially.
+;;
+;;     ┌───┬───┬───┐
+;;     │ ┌ │ ┬ │ ┐ │      7 8 9
+;;     ├───┼───┼───┤
+;;     │ ├ │ ┼ │ ┤ │      4 5 6
+;;     ├───┼───┼───┤
+;;     │ └ │ ┴ │ ┘ │      1 2 3
+;;     ├───┴───┼───┤
+;;     │   ─   │ │ │      0     .
+;;     └───────┴───┘
+;;
+;; Include it from your main config. Position doesn't matter -- templates are
+;; resolved after the whole config is read, so this can sit at the bottom
+;; alongside your other includes:
+;;
+;;     (include apl-numpad-box.kbd)
+;;
+;; ...then expand it inside your APL layer, on a line of its own:
+;;
+;;     (deflayermap APL
+;;       ...
+;;       (t! numpad-box)
+;;     )
+;;
+;; Names claimed in the global namespace: the template `numpad-box`.
+;; No layers, aliases or variables, so nothing here can collide with the
+;; rest of your config.
+;;
+;; Notes:
+;;   - NumLock state is irrelevant. Kanata matches the physical keys, so the
+;;     glyphs come out whether or not NumLock is on. Unheld, the keypad keeps
+;;     whatever behaviour NumLock gives it.
+;;   - These are the same eleven glyphs the grave dead key puts on the main
+;;     number row, if you also use altgruk-compose.kbd. Same layout, too.
+;;   - To put the pad behind APL+Shift instead, expand it in your APL-shift
+;;     layer rather than your APL layer.
+
+(deftemplate numpad-box ()
+  Numpad7       (unicode ┌)
+  Numpad8       (unicode ┬)
+  Numpad9       (unicode ┐)
+  Numpad4       (unicode ├)
+  Numpad5       (unicode ┼)
+  Numpad6       (unicode ┤)
+  Numpad1       (unicode └)
+  Numpad2       (unicode ┴)
+  Numpad3       (unicode ┘)
+  Numpad0       (unicode ─)
+  NumpadDecimal (unicode │)
+)
