@@ -83,7 +83,7 @@ Add <kbd>Shift</kbd> for the second set. Press them in either order, so <kbd>Cap
 Caps+Shift+E   ⍷        Caps+Shift+F   ⍛        Caps+Shift+Z   ⊆
 ```
 
-**Double-tap Caps Lock** for actual Caps Lock. Everything the layout does not map types normally, including <kbd>Shift</kbd> for capitals and shifted punctuation.
+**Double-tap <kbd>Caps Lock</kbd>** for actual Caps Lock. Everything the layout does not map types normally, including <kbd>Shift</kbd> for capitals and shifted punctuation.
 
 ## Optional modules
 
@@ -123,28 +123,28 @@ To disable it, delete both lines or do not include the file next to the layout.
 
 ### AltGr compositions
 
-Press **AltGr** with one of seven keys to start a dead key sequence. The subsequent keystroke produces the composed character.
+Press <kbd>AltGr</kbd> with one of seven keys to start a dead key sequence. The subsequent keystroke produces the composed character.
 
-| Start with  | Dead key | Gives you                                         |
-| ----------- | -------- | ------------------------------------------------- |
-| AltGr+W     | `^`      | superscripts, circumflex accents, the quad family |
-| AltGr+R     | `¨`      | umlauts, diaeresis operators                      |
-| AltGr+Y     | `~`      | tildes, fractions, currency                       |
-| AltGr+U     | `_`      | subscripts, underbar glyphs, circled letters      |
-| AltGr+A     | `´`      | acute accents                                     |
-| AltGr+S     | `` ` ``  | grave accents, box drawing on the number row      |
-| AltGr+Space |          | typographic spaces and dashes                     |
+| Start with                        | Dead key | Gives you                                         |
+| ---------------------------------- | -------- | ------------------------------------------------- |
+| <kbd>AltGr</kbd>+<kbd>W</kbd>      | `^`      | superscripts, circumflex accents, the quad family |
+| <kbd>AltGr</kbd>+<kbd>R</kbd>      | `¨`      | umlauts, diaeresis operators                      |
+| <kbd>AltGr</kbd>+<kbd>Y</kbd>      | `~`      | tildes, fractions, currency                       |
+| <kbd>AltGr</kbd>+<kbd>U</kbd>      | `_`      | subscripts, underbar glyphs, circled letters      |
+| <kbd>AltGr</kbd>+<kbd>A</kbd>      | `´`      | acute accents                                     |
+| <kbd>AltGr</kbd>+<kbd>S</kbd>      | `` ` ``  | grave accents, box drawing on the number row      |
+| <kbd>AltGr</kbd>+<kbd>Space</kbd>  |          | typographic spaces and dashes                     |
 
-Shift is optional when starting a sequence, so AltGr+Y and AltGr+Shift+Y both begin the `~` dead key. Once started, the next keystroke decides what you get:
+Shift is optional when starting a sequence, so <kbd>AltGr</kbd>+<kbd>Y</kbd> and <kbd>AltGr</kbd>+<kbd>Shift</kbd>+<kbd>Y</kbd> both begin the `~` dead key. Once started, the next keystroke decides what you get:
 
-| Keystroke         | Result                                  | Example                  |
-| ----------------- | --------------------------------------- | ------------------------ |
-| plain key         | the lowercase or unshifted entry        | AltGr+A then `e` → é     |
-| **Shift**+key     | the uppercase or shifted entry          | AltGr+A then Shift+E → É |
-| **APL key**+key   | the entry built on that key's APL glyph | AltGr+Y then Caps+E → ∉  |
-| Space             | the bare accent character               | AltGr+A then Space → ´   |
-| Esc               | cancels, types nothing                  |                          |
-| anything unmapped | types normally, and cancels             |                          |
+| Keystroke              | Result                                   | Example                                                          |
+| ---------------------- | ----------------------------------------- | ------------------------------------------------------------------ |
+| plain key               | the lowercase or unshifted entry         | <kbd>AltGr</kbd>+<kbd>A</kbd> then <kbd>e</kbd> → é                |
+| <kbd>Shift</kbd>+key    | the uppercase or shifted entry           | <kbd>AltGr</kbd>+<kbd>A</kbd> then <kbd>Shift</kbd>+<kbd>E</kbd> → É |
+| **APL key**+key         | the entry built on that key's APL glyph  | <kbd>AltGr</kbd>+<kbd>Y</kbd> then <kbd>Caps</kbd>+<kbd>E</kbd> → ∉ |
+| <kbd>Space</kbd>        | the bare accent character                | <kbd>AltGr</kbd>+<kbd>A</kbd> then <kbd>Space</kbd> → ´            |
+| <kbd>Esc</kbd>          | cancels, types nothing                   |                                                                    |
+| anything unmapped       | types normally, and cancels              |                                                                    |
 
 The sequence stays open until one of those happens. Here are some more examples:
 
@@ -155,7 +155,7 @@ AltGr+U  then  Caps+E     ⍷          AltGr+R  then  Caps+J     ⍤
 AltGr+S  then  7          ┌          AltGr+W  then  Caps+O     ⌼
 ```
 
-The APL-key case is where this differs from abrudz's Windows layout. There, the glyph you compose on is typed with AltGr; here it is typed with your APL key, because that is where the glyphs live in this layout. Six characters need **APL+Shift** because their base glyph does: ǽ ǿ ǻ Ǽ Ǿ Ǻ, on AltGr+A then Caps+Shift+C/V/B/F/G/H.
+The APL-key case is where this differs from abrudz's Windows layout. There, the glyph you compose on is typed with <kbd>AltGr</kbd>; here it is typed with your APL key, because that is where the glyphs live in this layout. Six characters need **APL+Shift** because their base glyph does: ǽ ǿ ǻ Ǽ Ǿ Ǻ, on <kbd>AltGr</kbd>+<kbd>A</kbd> then <kbd>Caps</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>/<kbd>V</kbd>/<kbd>B</kbd>/<kbd>F</kbd>/<kbd>G</kbd>/<kbd>H</kbd>.
 
 The full tables live in `altgruk-compose.kbd`, one commented layer per dead key. Enabling the module (already done in the shipped file) takes two lines in `en-GB_APL.kbd`:
 
@@ -185,7 +185,7 @@ To disable it, delete both lines or do not include the file next to the layout.
 
 **Change the main APL key.** Edit `(defvar apl caps)` near the top. If you also use `altgruk-compose.kbd`, update `$apl-held` and `$apl-sft` at the top of that file to name your key, since they cannot read `$apl`.
 
-**Change the key that starts a sequence.** Edit `(defvar dia ralt)` near the top of `en-GB_APL.kbd`. `rmet` and the Menu key both work well.
+**Change the key that starts a sequence.** Edit `(defvar dia ralt)` near the top of `en-GB_APL.kbd`. `rmet` and the <kbd>Menu</kbd> key both work well.
 
 ## Troubleshooting
 
