@@ -1,5 +1,5 @@
 ;; English (UK) keyboard mappings for APL
-;; en-GB_APL-v2.0
+;; en-GB_APL-v2.1
 ;; Compositions live in altgruk-compose.kbd and apl-numpad-box.kbd,
 ;; both included at the bottom.
 
@@ -145,4 +145,5 @@
 (defcfg
   process-unmapped-keys yes
   windows-altgr add-lctl-release
+  windows-sync-keystates none
 )
